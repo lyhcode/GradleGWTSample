@@ -46,6 +46,23 @@ Run development mode.
 
     gradle devmode
 
+Run Jetty web server.
+
+    gradle jettyRun
+
+Package war file.
+
+    gradle war
+
+Compile Java sources only.
+
+    gradle compileJava
+
+Speed up with ``--daemon`` parameter.
+
+    gradle --daemon compileJava
+
+Use gradle with daemon feature, frequently re-run compileJava tasks will save a lot of time.
 
 ## Conclusions ##
 

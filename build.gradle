@@ -16,6 +16,9 @@ def gwtModule = 'com.example.MyGWTApp'  // GWT module name
 def gwtStartupUrl = 'MyGWTApp.html'     // Startup URL for Dev Mode
 def gwtWarPath = 'war'                  // WebContent directory
 
+def gwtServerHost = 'localhost'
+def gwtServerPort = 8888
+
 //targetCompatibility = 1.6
 //sourceCompatibility = 1.6
 
@@ -24,9 +27,17 @@ version = '1.0'
 
 sourceSets.main.java.srcDirs = ['src']
 
-jettyRun.contextPath = '/'
-jettyRun.webAppSourceDirectory = file('war')
-jettyRun.httpPort = 8080
+// Jetty Web Container
+//jettyRun.daemon = true                              // Specifies whether the Jetty server should run in the background.
+jettyRun.contextPath = ''                           // The context path to use to deploy the web application.
+jettyRun.webAppSourceDirectory = file(gwtWarPath)   // The directory containing the web application source files.
+jettyRun.httpPort = gwtServerPort                   // The TCP port for Jetty to listen on for incoming HTTP requests.
+jettyRun.scanIntervalSeconds = 5                    // The interval in seconds between scanning the web app for file changes.
+
+// Package War
+war {
+    from gwtWarPath
+}
 
 repositories {
     mavenCentral()
@@ -88,7 +99,7 @@ task devmode (dependsOn: classes, type: JavaExec) {
  
     args = [
         gwtModule,
-        '-startupUrl', gwtStartupUrl,
+        '-startupUrl', "http://${gwtServerHost}:${gwtServerPort}/${gwtStartupUrl}",
         '-war', gwtWarPath
     ]
  
