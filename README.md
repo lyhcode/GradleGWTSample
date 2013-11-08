@@ -1,5 +1,17 @@
 ## Gradle Build Config for GWT ##
 
+Requirement:
+
+* Gradle (version > 1.0)
+
+Recommended to setup ``PATH`` and ``GRADLE_HOME`` environment variables.
+You should have ``gradle`` command visible in you executable PATH.
+
+**Hint.** GWT SDK manually installation is not required.
+This build file will download all depedencies with specified GWT version based on settings in ``build.gradle``.
+
+### Configuration ###
+
 Customize GWT settings in ``build.gradle``
 
     def gwtVersion = '2.5.1'
