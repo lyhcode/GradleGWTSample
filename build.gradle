@@ -1,0 +1,71 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+apply plugin: 'war'
+
+def version = '1.0'
+
+def gwtVersion = '2.5.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Compile GWT libs, needed for gwtCompile and the javaCompile
+    // Also includes the servlet-api
+    providedCompile "com.google.gwt:gwt-user:${gwtVersion}"
+    providedCompile "com.google.gwt:gwt-dev:${gwtVersion}"
+
+    // Needed for GWT compile and at runtime for RequestBuilder
+    // Specify two artifacts as workaround for GRADLE-1934
+    compile('javax.validation:validation-api:1.0.0.GA') {
+        artifact {
+            name = 'validation-api'
+            type = 'jar'
+        }
+        artifact {
+            name = 'validation-api'
+            type = 'jar'
+            classifier = 'sources'
+        }
+    }
+}
+
+task gwtc (dependsOn: classes, type: JavaExec) {
+    ext.buildDir = "${project.buildDir}/gwt"
+    ext.extraDir = "${project.buildDir}/extra"
+ 
+    inputs.source sourceSets.main.java.srcDirs
+    inputs.dir sourceSets.main.output.resourcesDir
+    outputs.dir buildDir
+ 
+    // Workaround for incremental build (GRADLE-1483)
+    outputs.upToDateSpec = new org.gradle.api.specs.AndSpec()
+ 
+    doFirst {
+        file(buildDir).mkdirs()
+        //classpath.each { println it.name}
+    }
+ 
+    main = 'com.google.gwt.dev.Compiler'
+ 
+    classpath {[
+        sourceSets.main.java.srcDirs,           // Java source
+        sourceSets.main.output.resourcesDir,    // Generated resources
+        sourceSets.main.output.classesDir,      // Generated classes
+        sourceSets.main.compileClasspath,       // Deps
+    ]}
+ 
+    args = [
+        'com.example.MyGWTApp'
+        , '-war', buildDir
+        //, '-logLevel', 'INFO'
+        //, '-localWorkers', '2'
+        //, '-compileReport'
+        //, '-extra', extraDir
+        //, '-draftCompile' // Speeds up compile with 25%
+    ]
+ 
+    maxHeapSize = '256M'
+}
