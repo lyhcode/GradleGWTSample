@@ -97,8 +97,8 @@ task devmode (dependsOn: classes, type: JavaExec) {
         configurations.compile
     ]}
  
-    args = [
-        gwtModule,
+    args = (gwtModule instanceof List)?gwtModule:[gwtModule]
+    args += [
         '-startupUrl', "http://${gwtServerHost}:${gwtServerPort}/${gwtStartupUrl}",
         '-war', gwtWarPath
     ]
