@@ -1,11 +1,32 @@
+/**
+ * Gradle build config for GWT sdk
+ *
+ * @author lyhcode
+ */
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'maven'
 apply plugin: 'war'
+apply plugin: 'jetty'
 
-def version = '1.0'
+// GWT Settings
+def gwtVersion = '2.5.1'                // GWT SDK version
+def gwtModule = 'com.example.MyGWTApp'  // GWT module name
+def gwtStartupUrl = 'MyGWTApp.html'     // Startup URL for Dev Mode
+def gwtWarPath = 'war'                  // WebContent directory
 
-def gwtVersion = '2.5.1'
+//targetCompatibility = 1.6
+//sourceCompatibility = 1.6
+
+group = 'example'
+version = '1.0'
+
+sourceSets.main.java.srcDirs = ['src']
+
+jettyRun.contextPath = '/'
+jettyRun.webAppSourceDirectory = file('war')
+jettyRun.httpPort = 8080
 
 repositories {
     mavenCentral()
@@ -33,39 +54,77 @@ dependencies {
 }
 
 task gwtc (dependsOn: classes, type: JavaExec) {
-    ext.buildDir = "${project.buildDir}/gwt"
-    ext.extraDir = "${project.buildDir}/extra"
- 
-    inputs.source sourceSets.main.java.srcDirs
-    inputs.dir sourceSets.main.output.resourcesDir
-    outputs.dir buildDir
- 
-    // Workaround for incremental build (GRADLE-1483)
-    outputs.upToDateSpec = new org.gradle.api.specs.AndSpec()
- 
-    doFirst {
-        file(buildDir).mkdirs()
-        //classpath.each { println it.name}
-    }
+
+    description = "GWT compile to JavaScript (production mode)"
  
     main = 'com.google.gwt.dev.Compiler'
+ 
+    classpath {[
+        sourceSets.main.java.srcDirs,
+        configurations.compile
+    ]}
+
+    args = [
+        gwtModule,
+        '-war', gwtWarPath
+    ]
+ 
+    maxHeapSize = '256M'
+}
+
+task devmode (dependsOn: classes, type: JavaExec) {
+
+    description = "Run development mode"
+ 
+    main = 'com.google.gwt.dev.DevMode'
  
     classpath {[
         sourceSets.main.java.srcDirs,           // Java source
         sourceSets.main.output.resourcesDir,    // Generated resources
         sourceSets.main.output.classesDir,      // Generated classes
         sourceSets.main.compileClasspath,       // Deps
+        configurations.compile
     ]}
  
     args = [
-        'com.example.MyGWTApp'
-        , '-war', buildDir
-        //, '-logLevel', 'INFO'
-        //, '-localWorkers', '2'
-        //, '-compileReport'
-        //, '-extra', extraDir
-        //, '-draftCompile' // Speeds up compile with 25%
+        gwtModule,
+        '-startupUrl', gwtStartupUrl,
+        '-war', gwtWarPath
     ]
  
     maxHeapSize = '256M'
+}
+
+/**
+ * Find GWT Modules
+ * @param searchDir
+ * @param entryPointOnly
+ */
+def findModules(String searchDir, boolean entryPointOnly) {
+    def modules = []
+    def baseLength = searchDir.size()
+
+    def searchDirFile = new File(searchDir)
+    if (searchDirFile.exists()) {
+        searchDirFile.eachFileRecurse { File file ->
+            // Replace Windows separators with Unix ones.
+            def filePath = file.path.replace('\\' as char, '/' as char)
+
+            // Chop off the search directory.
+            filePath = filePath.substring(baseLength + 1)
+
+            // Now check whether this path matches a module file.
+            def m = filePath =~ /([\w\/]+)\.gwt\.xml$/
+            if (m.count > 0) {
+                // now check if this module has an entry point
+                // if there's no entry point, then it's not necessary to compile the module
+                if (!entryPointOnly || file.text =~ /entry-point/) {
+                    // Extract the fully-qualified module name.
+                    modules << m[0][1].replace('/' as char, '.' as char)
+                }
+            }
+        }
+    }
+
+    return modules
 }

@@ -1,2 +1,5 @@
 .*
 build/
+gwt-unitCache
+war/mygwtapp
+war/WEB-INF/deploy
