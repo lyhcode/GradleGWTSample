@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Gradle GWT by lyhcode</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Gradle GWT</h1>
+        <p class="header">Compile and run GWT Development Mode with Gradle build script.</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/lyhcode/GradleGWTSample/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/lyhcode/GradleGWTSample/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/lyhcode/GradleGWTSample">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/lyhcode">lyhcode</a></p>
+
+
+      </header>
+      <section>
+        <h2>
+<a name="gradle-build-config-for-gwt" class="anchor" href="#gradle-build-config-for-gwt"><span class="octicon octicon-link"></span></a>Gradle Build Config for GWT</h2>
+
+<p>Requirement:</p>
+
+<ul>
+<li>Gradle (version &gt; 1.0)</li>
+</ul><p>Recommended to setup <code>PATH</code> and <code>GRADLE_HOME</code> environment variables.
+You should have <code>gradle</code> command visible in you executable PATH.</p>
+
+<p>For Mac OS X and Linux developers, install gradle with <code>gvm</code> tool is recommended.</p>
+
+<ul>
+<li>GVM the Groovy enVironment Manager - <a href="http://gvmtool.net/">http://gvmtool.net/</a>
+</li>
+</ul><p>With GVM tool, gradle installation with latest version is very simple to enter:</p>
+
+<pre><code>gvm install gradle
+</code></pre>
+
+<p><strong>Hint.</strong> GWT SDK manually installation is not required.
+This build file will download all depedencies with specified GWT version based on settings in <code>build.gradle</code>.</p>
+
+<h3>
+<a name="getting-started" class="anchor" href="#getting-started"><span class="octicon octicon-link"></span></a>Getting Started</h3>
+
+<p>Prepare your gradle environment first.</p>
+
+<p>Clone this project into your home using git.</p>
+
+<pre><code>git clone https://github.com/lyhcode/GradleGWTSample.git
+</code></pre>
+
+<p>Or just simply download zip file.</p>
+
+<ul>
+<li><a href="https://github.com/lyhcode/GradleGWTSample/archive/master.zip">https://github.com/lyhcode/GradleGWTSample/archive/master.zip</a></li>
+</ul><p>Change working directory into GradleGWTSample path.</p>
+
+<p>Execute <code>gradle devmode</code> command and waiting for a "GWT Development Mode" window pop-up.</p>
+
+<p>Browse the startup url.</p>
+
+<pre><code>http://localhost:8888/MyGWTApp.html?gwt.codesvr=127.0.0.1:9997
+</code></pre>
+
+<p>Done.</p>
+
+<h3>
+<a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>Configuration</h3>
+
+<p>First, customize GWT settings in <code>build.gradle</code></p>
+
+<pre><code>def gwtVersion = '2.5.1'
+def gwtModule = 'com.example.MyGWTApp'
+def gwtStartupUrl = 'MyGWTApp.html'
+def gwtWarPath = 'war'
+</code></pre>
+
+<p>The sample contains a GWT default directory structure.
+Please ensure the path related settings is fit your project needs.</p>
+
+<pre><code>/src    # Java Sources
+/war    # WebContents
+</code></pre>
+
+<h3>
+<a name="command-line-usages" class="anchor" href="#command-line-usages"><span class="octicon octicon-link"></span></a>Command-line Usages</h3>
+
+<p>The build.gradle sample defined <code>gwtc</code>, <code>devmode</code> tasks.
+These tasks are equal to GWT official definition in webAppCreator generated build.xml (Ant).</p>
+
+<p>GWT compile to JavaScript (production mode).</p>
+
+<pre><code>gradle gwtc
+</code></pre>
+
+<p>Run development mode.</p>
+
+<pre><code>gradle devmode
+</code></pre>
+
+<p>Run Jetty web server.</p>
+
+<pre><code>gradle jettyRun
+</code></pre>
+
+<p>Package war file.</p>
+
+<pre><code>gradle war
+</code></pre>
+
+<p>Compile Java sources only.</p>
+
+<pre><code>gradle compileJava
+</code></pre>
+
+<p>Speed up with <code>--daemon</code> parameter.</p>
+
+<pre><code>gradle --daemon compileJava
+</code></pre>
+
+<p>Use gradle with daemon feature, frequently re-run compileJava tasks will save a lot of time.</p>
+
+<h2>
+<a name="conclusions" class="anchor" href="#conclusions"><span class="octicon octicon-link"></span></a>Conclusions</h2>
+
+<p>Build GWT project with Gradle is much better and more convience than Ant.
+Gradle build config specfied the GWT version to resolves all dependencies and download automatically.
+For future GWT version upgrade, just simply change the version settings.
+All the other depdencies for project needs are all configurable.
+No more fat JARs need to bundle with project sources.</p>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
