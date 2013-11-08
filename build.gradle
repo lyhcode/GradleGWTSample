@@ -105,37 +105,3 @@ task devmode (dependsOn: classes, type: JavaExec) {
  
     maxHeapSize = '256M'
 }
-
-/**
- * Find GWT Modules
- * @param searchDir
- * @param entryPointOnly
- */
-def findModules(String searchDir, boolean entryPointOnly) {
-    def modules = []
-    def baseLength = searchDir.size()
-
-    def searchDirFile = new File(searchDir)
-    if (searchDirFile.exists()) {
-        searchDirFile.eachFileRecurse { File file ->
-            // Replace Windows separators with Unix ones.
-            def filePath = file.path.replace('\\' as char, '/' as char)
-
-            // Chop off the search directory.
-            filePath = filePath.substring(baseLength + 1)
-
-            // Now check whether this path matches a module file.
-            def m = filePath =~ /([\w\/]+)\.gwt\.xml$/
-            if (m.count > 0) {
-                // now check if this module has an entry point
-                // if there's no entry point, then it's not necessary to compile the module
-                if (!entryPointOnly || file.text =~ /entry-point/) {
-                    // Extract the fully-qualified module name.
-                    modules << m[0][1].replace('/' as char, '.' as char)
-                }
-            }
-        }
-    }
-
-    return modules
-}
