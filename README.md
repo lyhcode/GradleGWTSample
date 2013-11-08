@@ -18,6 +18,28 @@ With GVM tool, gradle installation with latest version is very simple to enter:
 **Hint.** GWT SDK manually installation is not required.
 This build file will download all depedencies with specified GWT version based on settings in ``build.gradle``.
 
+### Getting Started ###
+
+Prepare your gradle environment first.
+
+Clone this project into your home using git.
+
+    git clone https://github.com/lyhcode/GradleGWTSample.git
+
+Or just simply download zip file.
+
+* https://github.com/lyhcode/GradleGWTSample/archive/master.zip
+
+Change working directory into GradleGWTSample path.
+
+Execute ``gradle devmode`` command and waiting for a "GWT Development Mode" window pop-up.
+
+Browse the startup url.
+
+    http://localhost:8888/MyGWTApp.html?gwt.codesvr=127.0.0.1:9997
+
+Done.
+
 ### Configuration ###
 
 First, customize GWT settings in ``build.gradle``
