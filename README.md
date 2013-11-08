@@ -7,17 +7,31 @@ Requirement:
 Recommended to setup ``PATH`` and ``GRADLE_HOME`` environment variables.
 You should have ``gradle`` command visible in you executable PATH.
 
+For Mac OS X and Linux developers, install gradle with ``gvm`` tool is recommended.
+
+* GVM the Groovy enVironment Manager - http://gvmtool.net/
+
+With GVM tool, gradle installation with latest version is very simple to enter:
+
+    gvm install gradle
+
 **Hint.** GWT SDK manually installation is not required.
 This build file will download all depedencies with specified GWT version based on settings in ``build.gradle``.
 
 ### Configuration ###
 
-Customize GWT settings in ``build.gradle``
+First, customize GWT settings in ``build.gradle``
 
     def gwtVersion = '2.5.1'
     def gwtModule = 'com.example.MyGWTApp'
     def gwtStartupUrl = 'MyGWTApp.html'
     def gwtWarPath = 'war'
+
+The sample contains a GWT default directory structure.
+Please ensure the path related settings is fit your project needs.
+
+    /src    # Java Sources
+    /war    # WebContents
 
 ### Command-line Usages ###
 
