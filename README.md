@@ -45,3 +45,12 @@ GWT compile to JavaScript (production mode).
 Run development mode.
 
     gradle devmode
+
+
+## Conclusions ##
+
+Build GWT project with Gradle is much better and more convience than Ant.
+Gradle build config specfied the GWT version to resolves all dependencies and download automatically.
+For future GWT version upgrade, just simply change the version settings.
+All the other depdencies for project needs are all configurable.
+No more fat JARs need to bundle with project sources.
