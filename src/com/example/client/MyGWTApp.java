@@ -110,7 +110,7 @@ public class MyGWTApp implements EntryPoint {
         errorLabel.setText("");
         String textToServer = nameField.getText();
         if (!FieldVerifier.isValidName(textToServer)) {
-          errorLabel.setText("Please enter at least four characters");
+          errorLabel.setText(FieldVerifier.nameIsInvalidMessage());
           return;
         }
         
