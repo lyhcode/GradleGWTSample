@@ -21,6 +21,7 @@ package com.example.shared;
  * </p>
  */
 public class FieldVerifier {
+  private static final int MIN_NAME_LENGTH = 4;
 
   /**
    * Verifies that the specified name is valid for our service.
@@ -34,9 +35,10 @@ public class FieldVerifier {
    * @return true if valid, false if invalid
    */
   public static boolean isValidName(String name) {
-    if (name == null) {
-      return false;
-    }
-    return name.length() > 3;
+    return name != null && name.length() >= MIN_NAME_LENGTH;
+  }
+
+  public static String nameIsInvalidMessage() {
+    return "Name must be at least " + MIN_NAME_LENGTH + " characters long";
   }
 }
